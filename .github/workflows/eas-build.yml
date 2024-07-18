@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - test-git-action
   pull_request:
     branches:
       - main
