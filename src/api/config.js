@@ -1,0 +1,30 @@
+const config = {
+  baseUrl: "https://test.erp.craftschoolship.com/jsonrpc",
+  database: "bitnami_odoo",
+  username: "test@example.com",
+  password: "Temp4Now#",
+  model: {
+    accountMove: "account.move",
+    accountMoveLine: "account.move.line",
+    attendance: "op.attendance.line",
+    calendar: "calendar.event",
+    calendarAttendee: "calendar.attendee",
+    craftInvoice: "craft.invoice",
+    craftInstallmentLines: "craft.installment.lines",
+    craftSession: "craft.session",
+    craftStudent: "craft.student",
+    groups: "op.batch",
+    opActivity: "op.activity",
+    opCourse: "op.course",
+    opSession: "op.session",
+    opStudent: "op.student",
+    parents: "craft.parent",
+    partner: "res.partner",
+    productTemplate: "product.template",
+    saleOrder: "sale.order",
+    teachers: "craft.teacher",
+    users: "res.users",
+  },
+};
+
+export default config;
