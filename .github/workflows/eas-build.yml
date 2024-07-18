@@ -20,7 +20,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 20
+          node-version: 18
 
       - name: Install Yarn
         run: npm install -g yarn
@@ -36,7 +36,7 @@ jobs:
 
       - name: Log in to EAS
         env:
-          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN_2 }}
         run: eas login --token $EXPO_TOKEN
 
       - name: Build Android preview
