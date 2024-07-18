@@ -43,13 +43,11 @@ const ProfileScreen = () => {
   useEffect(() => {
     const loadProfileImage = async () => {
       try {
-        // Charger l'avatar depuis AsyncStorage
         const cachedAvatar = await AsyncStorage.getItem("avatar_1024");
         if (cachedAvatar) {
           setAvatarUri(`data:image/png;base64,${cachedAvatar}`);
         }
 
-        // Fetch profile image from Odoo
         const userData = await jsonrpcRequest(
           sessionId,
           config.password,
@@ -84,7 +82,6 @@ const ProfileScreen = () => {
           const base64Image = avatar_1024;
           const newAvatarUri = `data:image/png;base64,${base64Image}`;
 
-          // Update UI and cache if the fetched image is different from the cached image
           if (newAvatarUri !== avatarUri) {
             setAvatarUri(newAvatarUri);
             await AsyncStorage.setItem("avatar_1024", base64Image);
@@ -157,11 +154,19 @@ const ProfileScreen = () => {
           {userInformation && userInformation.name}
         </Heading>
       </Center>
-      <Box mt={4}>
-        <Heading color={"black"} size="md">
-          Contact
-        </Heading>
-        <ScrollView mt={2} space={2}>
+      <ScrollView
+        mt={2}
+        space={2}
+        flexGrow={1}
+        h={"80%"}
+        w={"100%"}
+        pb={"10%"}
+        contentContainerStyle={{ paddingBottom: 80 }}
+      >
+        <Box mt={4}>
+          <Heading color={"black"} size="md">
+            Contact
+          </Heading>
           <VStack>
             <Text mt={2} color={"black"} bold>
               Adresse email Ma Réussite
@@ -206,8 +211,8 @@ const ProfileScreen = () => {
               Déconnexion
             </Button>
           </Box>
-        </ScrollView>
-      </Box>
+        </Box>
+      </ScrollView>
     </Box>
   );
 };
