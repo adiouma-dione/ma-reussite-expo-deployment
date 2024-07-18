@@ -80,17 +80,6 @@ const LoginScreen = () => {
                   showPassword={showPassword}
                   setShowPassword={setShowPassword}
                 />
-                <Link
-                  _text={{
-                    fontSize: "xs",
-                    fontWeight: "500",
-                    color: "primary.500",
-                  }}
-                  alignSelf="flex-end"
-                  mt={1}
-                >
-                  Mot de passe oublié ?
-                </Link>
                 {error ? (
                   <Text color={"danger.500"} textAlign={"center"} mt={3}>
                     {error}
