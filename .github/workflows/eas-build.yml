@@ -1,0 +1,46 @@
+name: EAS Build
+
+on:
+  push:
+    branches:
+      - main
+      - test-git-action
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+
+      - name: Install Yarn
+        run: npm install -g yarn
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Install EAS CLI
+        run: npm install -g eas-cli
+
+      - name: Log in to EAS
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: eas login --token $EXPO_TOKEN
+
+      - name: Build Android preview
+        run: eas build --platform android --profile preview
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: eas-build-outputs
+          path: build/
