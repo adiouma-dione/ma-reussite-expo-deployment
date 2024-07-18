@@ -169,7 +169,7 @@ const ProfileScreen = () => {
           </Heading>
           <VStack>
             <Text mt={2} color={"black"} bold>
-              Adresse email Ma Réussite
+              Adresse email Ma Réussite :
             </Text>
             <Link href={userInformation && userInformation.email}>
               <Text color={"primary.500"}>
