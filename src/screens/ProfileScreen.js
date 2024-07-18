@@ -169,7 +169,7 @@ const ProfileScreen = () => {
           </Heading>
           <VStack>
             <Text mt={2} color={"black"} bold>
-              Adresse email Ma Réussite :
+              Adresse email Ma Réussite
             </Text>
             <Link href={userInformation && userInformation.email}>
               <Text color={"primary.500"}>
@@ -179,7 +179,7 @@ const ProfileScreen = () => {
           </VStack>
           <VStack>
             <Text mt={2} color={"black"} bold>
-              Adresse email Microsoft :
+              Adresse email Microsoft
             </Text>
             <Link href={userInformation && userInformation.microsoft_email}>
               <Text color={"primary.500"}>
@@ -189,7 +189,7 @@ const ProfileScreen = () => {
           </VStack>
           <VStack>
             <Text mt={2} color={"black"} bold>
-              Microsoft UID:
+              Microsoft UID
             </Text>
             <Text color={"black"}>
               {userInformation && userInformation.microsoft_uid}
