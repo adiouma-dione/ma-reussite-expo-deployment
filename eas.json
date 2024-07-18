@@ -7,31 +7,31 @@
       "distribution": "internal",
       "android": {
         "buildType": "apk",
-        "image": "default"
+        "image": "latest"
       },
       "ios": {
         "simulator": true,
-        "image": "default"
+        "image": "latest"
       }
     },
     "preview": {
       "distribution": "internal",
       "android": {
         "buildType": "apk",
-        "image": "default"
+        "image": "latest"
       },
       "ios": {
         "simulator": true,
-        "image": "default"
+        "image": "latest"
       }
     },
     "production": {
       "android": {
         "buildType": "app-bundle",
-        "image": "default"
+        "image": "latest"
       },
       "ios": {
-        "image": "default"
+        "image": "latest"
       }
     }
   }
