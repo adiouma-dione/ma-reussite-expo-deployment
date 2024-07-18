@@ -38,7 +38,7 @@ jobs:
       - name: Create EAS secret
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN_2 }}
-        run: eas secret:create --name EXPO_TOKEN --value $EXPO_TOKEN --scope project
+        run: eas secret:create --name EXPO_TOKEN --value $EXPO_TOKEN --scope project --owner adiouma
 
       - name: Build Android preview
         run: eas build --platform android --profile preview
