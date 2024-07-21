@@ -10,15 +10,15 @@ function HomeScreenBanner() {
   const navigation = useNavigation();
   const [sessionId, setSessionId] = useState(null);
   const [password, setPassword] = useState(null);
-  const [studentId, setStudentId] = useState(null);
+  const [partnerid, setPartnerid] = useState(null);
   const [loading, setLoading] = useState(true);
   const [avatarUri, setAvatarUri] = useState(null);
 
   useEffect(() => {
-    const { sessionId, email, password, studentId } = route?.params;
+    const { sessionId, email, password, partnerid } = route?.params;
     setSessionId(sessionId);
     setPassword(password);
-    setStudentId(studentId[0]);
+    setPartnerid(partnerid[0]);
   }, [route]);
 
   useMemo(async () => {
@@ -27,7 +27,7 @@ function HomeScreenBanner() {
       setAvatarUri(`data:image/png;base64,${cachedAvatar}`);
     }
     setLoading(false);
-  }, [sessionId, studentId]);
+  }, [sessionId, partnerid]);
 
   useEffect(() => {
     const fetchProfileImage = async () => {
@@ -36,7 +36,7 @@ function HomeScreenBanner() {
           sessionId,
           config.password,
           config.model.opStudent,
-          [[["partner_id", "=", studentId]]],
+          [[["partner_id", "=", partnerid]]],
           ["avatar_1024"]
         );
 
@@ -50,6 +50,7 @@ function HomeScreenBanner() {
             await AsyncStorage.setItem("avatar_1024", base64Image);
           }
         } else {
+          await AsyncStorage.removeItem("avatar_1024");
           console.log("No avatar found for the user.");
         }
       } catch (error) {
@@ -57,21 +58,21 @@ function HomeScreenBanner() {
       }
     };
 
-    if (sessionId && password && studentId) {
+    if (sessionId && password && partnerid) {
       fetchProfileImage();
     }
-  }, [sessionId, password, studentId, avatarUri]);
+  }, [sessionId, password, partnerid, avatarUri]);
 
   const goToProfile = () => {
     navigation.navigate("Profile", {
       sessionId: sessionId,
       password: password,
-      studentId: studentId,
+      partnerid: partnerid,
     });
   };
 
   return (
-    <Box bg="white" mt={"5%"}>
+    <Box bg="white">
       <HStack pt={10} pb={5}>
         <Image
           size="sm"

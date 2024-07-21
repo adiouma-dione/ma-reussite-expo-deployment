@@ -27,16 +27,16 @@ const PaymentScreen = () => {
   const [sortOrder, setSortOrder] = useState("recent");
   const [sessionId, setSessionId] = useState(null);
   const [password, setPassword] = useState(null);
-  const [studentId, setStudentId] = useState(null);
+  const [partnerid, setPartnerid] = useState(null);
   const [payments, setPayments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [paymentDetails, setPaymentDetails] = useState({});
 
   useEffect(() => {
-    const { sessionId, email, password, studentId } = route?.params;
+    const { sessionId, email, password, partnerid } = route?.params;
     setSessionId(sessionId);
     setPassword(password);
-    setStudentId(studentId[0]);
+    setPartnerid(partnerid[0]);
   }, [route]);
 
   const handlePress = (paymentDetails) => {
@@ -51,7 +51,7 @@ const PaymentScreen = () => {
           sessionId,
           password,
           config.model.accountMove,
-          [[["partner_id", "=", studentId]]],
+          [[["partner_id", "=", partnerid]]],
           ["name", "payment_state"]
         );
 
@@ -59,7 +59,7 @@ const PaymentScreen = () => {
           sessionId,
           password,
           config.model.accountMoveLine,
-          [[["partner_id", "=", studentId]]],
+          [[["partner_id", "=", partnerid]]],
           [
             "date",
             "display_name",
@@ -86,14 +86,14 @@ const PaymentScreen = () => {
       } catch (error) {
         console.error("Error fetching payments:", error);
       } finally {
-        setLoading(false); // Arrête le chargement une fois les paiements chargés
+        setLoading(false);
       }
     };
 
-    if (sessionId && password && studentId) {
+    if (sessionId && password && partnerid) {
       fetchPayment();
     }
-  }, [sessionId, password, studentId]);
+  }, [sessionId, password, partnerid]);
 
   useEffect(() => {
     // payments && console.log("Partner...", new Date().getMinutes(), payments);
@@ -168,20 +168,35 @@ const PaymentScreen = () => {
             contentContainerStyle={{ paddingBottom: 80 }}
           >
             <VStack w={"full"} mb={"10%"} space={4} minH={"80%"}>
-              {payments.map((payment, index) => (
-                <PaymentCard
-                  key={index}
-                  date={payment.date}
-                  name={payment.name}
-                  product_id={payment.product_id}
-                  display_name={payment.display_name}
-                  amount={payment.price_total}
-                  state={payment.payment_state}
-                  partner_id={payment.partner_id}
-                  handlePress={handlePress}
-                  onOpen={onOpen}
-                />
-              ))}
+              {console.log("payments.length...", payments.length)}
+              {payments.length > 0 ? (
+                payments.map((payment, index) => (
+                  <PaymentCard
+                    key={index}
+                    date={payment.date}
+                    name={payment.name}
+                    product_id={payment.product_id}
+                    display_name={payment.display_name}
+                    amount={payment.price_total}
+                    state={payment.payment_state}
+                    partner_id={payment.partner_id}
+                    handlePress={handlePress}
+                    onOpen={onOpen}
+                  />
+                ))
+              ) : (
+                <Box>
+                  <Text
+                    mt={"30%"}
+                    color={"black"}
+                    textAlign={"center"}
+                    fontSize={"2xl"}
+                    fontWeight={"bold"}
+                  >
+                    Pas de paiement
+                  </Text>
+                </Box>
+              )}
             </VStack>
           </ScrollView>
         )}

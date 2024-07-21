@@ -21,16 +21,16 @@ const ActivityScreen = () => {
   const navigation = useNavigation();
   const [sessionId, setSessionId] = useState(null);
   const [password, setPassword] = useState(null);
-  const [studentId, setStudentId] = useState(null);
+  const [partnerid, setPartnerid] = useState(null);
   const [activities, setActivities] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclose();
   const [selectedActivity, setSelectedActivity] = useState();
 
   useEffect(() => {
-    const { sessionId, email, password, studentId } = route?.params;
+    const { sessionId, email, password, partnerid } = route?.params;
     setSessionId(sessionId);
     setPassword(password);
-    setStudentId(studentId[1]);
+    setPartnerid(partnerid[1]);
   }, [route]);
 
   useEffect(() => {
@@ -40,7 +40,7 @@ const ActivityScreen = () => {
           sessionId,
           config.password,
           config.model.opActivity,
-          [[["student_id", "=", studentId]]],
+          [[["student_id", "=", partnerid]]],
           ["student_id", "type_id", "date", "description"]
         );
 
@@ -52,10 +52,10 @@ const ActivityScreen = () => {
       }
     };
 
-    if (sessionId && password && studentId) {
+    if (sessionId && password && partnerid) {
       fetchActivities();
     }
-  }, [sessionId, password, studentId]);
+  }, [sessionId, password, partnerid]);
 
   return (
     <Box flex={1} bg={"white"}>
@@ -63,13 +63,11 @@ const ActivityScreen = () => {
         <Box>
           <ScrollView
             p={4}
-            //   h={"100%"}
             h={"100%"}
-            //   p={2}
             flexGrow={1}
             contentContainerStyle={{ paddingBottom: 80 }}
           >
-            {activities &&
+            {activities.length > 0 ? (
               activities.map((activity, index) => (
                 <Box
                   key={index}
@@ -106,7 +104,20 @@ const ActivityScreen = () => {
                     </VStack>
                   )}
                 </Box>
-              ))}
+              ))
+            ) : (
+              <Box>
+                <Text
+                  mt={"30%"}
+                  color={"black"}
+                  textAlign={"center"}
+                  fontSize={"2xl"}
+                  fontWeight={"bold"}
+                >
+                  Pas d'evenement
+                </Text>
+              </Box>
+            )}
           </ScrollView>
         </Box>
 

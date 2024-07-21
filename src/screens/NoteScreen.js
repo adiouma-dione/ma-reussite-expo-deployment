@@ -10,17 +10,17 @@ const NoteScreen = () => {
   const navigation = useNavigation();
   const [sessionId, setSessionId] = useState(null);
   const [password, setPassword] = useState(null);
-  const [studentId, setStudentId] = useState(null);
+  const [partnerid, setPartnerid] = useState(null);
   const [note, setNote] = useState();
   const [course, setCourse] = useState();
   const [institute, setInstitute] = useState();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const { sessionId, email, password, studentId } = route?.params;
+    const { sessionId, email, password, partnerid } = route?.params;
     setSessionId(sessionId);
     setPassword(password);
-    setStudentId(studentId[0]);
+    setPartnerid(partnerid[0]);
   }, [route]);
 
   useEffect(() => {
@@ -30,7 +30,7 @@ const NoteScreen = () => {
           sessionId,
           config.password,
           config.model.opStudent,
-          [[["partner_id", "=", studentId]]],
+          [[["partner_id", "=", partnerid]]],
           ["prev_result", "prev_course_id", "prev_institute_id"]
         );
         // console.log("noteData...", noteData[0].prev_result);
@@ -40,13 +40,13 @@ const NoteScreen = () => {
       } catch (error) {
         console.error("Error fetching payments:", error);
       } finally {
-        setLoading(false); // Arrête le chargement une fois les paiements chargés
+        setLoading(false);
       }
     };
-    if (sessionId && password && studentId) {
+    if (sessionId && password && partnerid) {
       fetchNote();
     }
-  }, [sessionId, password, studentId]);
+  }, [sessionId, password, partnerid]);
 
   return (
     <Box flex={1} bg={"white"}>
@@ -74,7 +74,7 @@ const NoteScreen = () => {
               </Text>
             </HStack>
             <Box justifyContent={"center"} alignItems={"center"}>
-              {note && (
+              {note ? (
                 <>
                   <Text color={"black"} fontSize={18} fontWeight={"bold"} p={4}>
                     Moyenne Annuelle :
@@ -86,6 +86,18 @@ const NoteScreen = () => {
                     note={true}
                   />
                 </>
+              ) : (
+                <Box>
+                  <Text
+                    mt={"30%"}
+                    color={"black"}
+                    textAlign={"center"}
+                    fontSize={"2xl"}
+                    fontWeight={"bold"}
+                  >
+                    Pas de note
+                  </Text>
+                </Box>
               )}
             </Box>
           </>

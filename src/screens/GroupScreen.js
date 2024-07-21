@@ -18,14 +18,14 @@ const GroupScreen = ({ navigation }) => {
   const route = useRoute();
   const [groups, setGroups] = useState([]);
   const [sessionId, setSessionId] = useState(null);
-  const [studentId, setStudentId] = useState(null);
+  const [partnerid, setPartnerid] = useState(null);
   const [password, setPassword] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const { sessionId, email, password, studentId } = route?.params;
+    const { sessionId, email, password, partnerid } = route?.params;
     setSessionId(sessionId);
-    setStudentId(studentId[0]);
+    setPartnerid(partnerid[0]);
     setPassword(password);
   }, [route]);
 
@@ -45,10 +45,10 @@ const GroupScreen = ({ navigation }) => {
       }
     };
 
-    if (sessionId && password && studentId) {
+    if (sessionId && password && partnerid) {
       fetchGroups();
     }
-  }, [sessionId, studentId, password]);
+  }, [sessionId, partnerid, password]);
 
   return (
     <Box flex={1} bg={"white"}>
@@ -75,37 +75,51 @@ const GroupScreen = ({ navigation }) => {
             contentContainerStyle={{ paddingBottom: 80 }}
           >
             <VStack w={"100%"} mb={"20%"}>
-              {groups.map((group, index) => (
-                <Pressable
-                  shadow={"9"}
-                  key={index}
-                  // onPress={() => {
-                  //   navigation.navigate("Sessions", {
-                  //     groupName: group.name,
-                  //   });
-                  // }}
-                >
-                  <Box
-                    bg="white"
-                    p={4}
-                    mx={2}
-                    my={2}
-                    rounded="lg"
-                    shadow={2}
-                    justifyContent="center"
-                    height="100"
+              {groups.length > 0 ? (
+                groups.map((group, index) => (
+                  <Pressable
+                    shadow={"9"}
+                    key={index}
+                    // onPress={() => {
+                    //   navigation.navigate("Sessions", {
+                    //     groupName: group.name,
+                    //   });
+                    // }}
                   >
-                    <HStack alignItems="center">
-                      <CircularProgress progress={group.progress} />
-                      <Box flex={1} mr={5} alignItems="center">
-                        <Text color={"black"} fontWeight="bold" fontSize="lg">
-                          {group.name}
-                        </Text>
-                      </Box>
-                    </HStack>
-                  </Box>
-                </Pressable>
-              ))}
+                    <Box
+                      bg="white"
+                      p={4}
+                      mx={2}
+                      my={2}
+                      rounded="lg"
+                      shadow={2}
+                      justifyContent="center"
+                      height="100"
+                    >
+                      <HStack alignItems="center">
+                        <CircularProgress progress={group.progress} />
+                        <Box flex={1} mr={5} alignItems="center">
+                          <Text color={"black"} fontWeight="bold" fontSize="lg">
+                            {group.name}
+                          </Text>
+                        </Box>
+                      </HStack>
+                    </Box>
+                  </Pressable>
+                ))
+              ) : (
+                <Box>
+                  <Text
+                    mt={"30%"}
+                    color={"black"}
+                    textAlign={"center"}
+                    fontSize={"2xl"}
+                    fontWeight={"bold"}
+                  >
+                    Pas de groupe
+                  </Text>
+                </Box>
+              )}
             </VStack>
           </ScrollView>
         )}

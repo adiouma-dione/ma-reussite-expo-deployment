@@ -25,7 +25,7 @@ const HomeScreen = () => {
   const route = useRoute();
   const [sessionId, setSessionId] = useState(null);
   const [password, setPassword] = useState(null);
-  const [studentId, setStudentId] = useState(null);
+  const [partnerid, setPartnerid] = useState(null);
   const [events, setEvents] = useState(null);
   const [markedDate, setMarkedDate] = useState({});
   const [todaysEvents, setTodaysEvents] = useState([]);
@@ -34,10 +34,10 @@ const HomeScreen = () => {
   const [selectedDayEvents, setSelectedDayEvents] = useState([]);
 
   useEffect(() => {
-    const { sessionId, email, password, studentId } = route?.params;
+    const { sessionId, email, password, partnerid } = route?.params;
     setSessionId(sessionId);
     setPassword(password);
-    setStudentId(studentId[0]);
+    setPartnerid(partnerid[0]);
   }, [route]);
 
   useEffect(() => {
@@ -47,7 +47,7 @@ const HomeScreen = () => {
           sessionId,
           password,
           config.model.craftSession,
-          [[["partner_ids", "=", studentId]]],
+          [[["partner_ids", "=", partnerid]]],
           [
             "classroom_id",
             "recurrency",
@@ -68,7 +68,7 @@ const HomeScreen = () => {
     if (sessionId && password) {
       fetchEvents();
     }
-  }, [sessionId, password, studentId]);
+  }, [sessionId, password, partnerid]);
 
   useEffect(() => {
     if (events) {
@@ -162,7 +162,13 @@ const HomeScreen = () => {
                 Événements
               </Text>
             </Box>
-            <ScrollView w="100%">
+            <ScrollView
+              w="100%"
+              flexGrow={1}
+              mx={"auto"}
+              // mb={"5%"}
+              contentContainerStyle={{ paddingBottom: 40 }}
+            >
               <VStack space={4} px={4}>
                 {selectedDayEvents &&
                   selectedDayEvents.map((eventMarked, index) => (

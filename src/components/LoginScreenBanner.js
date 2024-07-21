@@ -3,7 +3,7 @@ import { Box, Image } from "native-base";
 
 function LoginScreenBanner() {
   return (
-    <Box bg={"primary.500"} mt={"20%"} mb={"20%"}>
+    <Box bg={"primary.500"}>
       <Image
         size="sm"
         w={"70%"}

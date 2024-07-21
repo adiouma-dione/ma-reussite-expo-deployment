@@ -28,16 +28,16 @@ const ProfileScreen = () => {
   const navigation = useNavigation();
   const [sessionId, setSessionId] = useState(null);
   const [password, setPassword] = useState(null);
-  const [studentId, setStudentId] = useState(null);
+  const [partnerid, setPartnerid] = useState(null);
   const [avatarUri, setAvatarUri] = useState(null);
   const [loading, setLoading] = useState(true);
   const [userInformation, setUserInformation] = useState();
 
   useEffect(() => {
-    const { sessionId, email, password, studentId } = route?.params;
+    const { sessionId, email, password, partnerid } = route?.params;
     setSessionId(sessionId);
     setPassword(password);
-    setStudentId(studentId);
+    setPartnerid(partnerid);
   }, [route]);
 
   useEffect(() => {
@@ -52,31 +52,17 @@ const ProfileScreen = () => {
           sessionId,
           config.password,
           config.model.opStudent,
-          [[["partner_id", "=", studentId]]],
-          [
-            "avatar_1024",
-            "name",
-            "email",
-            "microsoft_email",
-            "microsoft_uid",
-            "qrcode",
-          ]
+          [[["partner_id", "=", partnerid]]],
+          ["avatar_1024", "name", "email", "qrcode"]
         );
 
+        // console.log("userData...", userData);
+
         if (userData.length > 0 && userData[0].avatar_1024) {
-          const {
-            avatar_1024,
-            name,
-            email,
-            microsoft_email,
-            microsoft_uid,
-            qrcode,
-          } = userData[0];
+          const { avatar_1024, name, email, qrcode } = userData[0];
           setUserInformation({
             name: name,
             email: email,
-            microsoft_email: microsoft_email,
-            microsoft_uid: microsoft_uid,
             qrcode: qrcode,
           });
           const base64Image = avatar_1024;
@@ -87,6 +73,7 @@ const ProfileScreen = () => {
             await AsyncStorage.setItem("avatar_1024", base64Image);
           }
         } else {
+          await AsyncStorage.removeItem("avatar_1024");
           console.log("No avatar found for the user.");
         }
       } catch (error) {
@@ -96,10 +83,10 @@ const ProfileScreen = () => {
       }
     };
 
-    if (sessionId && password && studentId) {
+    if (sessionId && password && partnerid) {
       loadProfileImage();
     }
-  }, [sessionId, password, studentId, avatarUri]);
+  }, [sessionId, password, partnerid, avatarUri]);
 
   return (
     <Box flex={1} p={4} bg="white">
@@ -158,58 +145,42 @@ const ProfileScreen = () => {
         mt={2}
         space={2}
         flexGrow={1}
-        h={"80%"}
+        h={"100%"}
         w={"100%"}
-        pb={"10%"}
+        mb={"10%"}
         contentContainerStyle={{ paddingBottom: 80 }}
       >
         <Box mt={4}>
           <Heading color={"black"} size="md">
             Contact
           </Heading>
-          <VStack>
-            <Text mt={2} color={"black"} bold>
-              Adresse email Ma Réussite
-            </Text>
-            <Link href={userInformation && userInformation.email}>
-              <Text color={"primary.500"}>
-                {userInformation && userInformation.email}
+          <Box h={"100%"} justifyContent={"space-between"}>
+            <VStack>
+              <Text mt={2} color={"black"} bold>
+                Adresse email :
               </Text>
-            </Link>
-          </VStack>
-          <VStack>
-            <Text mt={2} color={"black"} bold>
-              Adresse email Microsoft
-            </Text>
-            <Link href={userInformation && userInformation.microsoft_email}>
-              <Text color={"primary.500"}>
-                {userInformation && userInformation.microsoft_email}
-              </Text>
-            </Link>
-          </VStack>
-          <VStack>
-            <Text mt={2} color={"black"} bold>
-              Microsoft UID
-            </Text>
-            <Text color={"black"}>
-              {userInformation && userInformation.microsoft_uid}
-            </Text>
-          </VStack>
-          <Box mx={"auto"} my={10}>
-            <QRCode
-              size={150}
-              value={userInformation && userInformation.qrcode}
-            ></QRCode>
-          </Box>
-          <Box>
-            <Button
-              mx={"auto"}
-              bgColor={"danger.600"}
-              w={"80%"}
-              onPress={() => navigation.navigate("Login")}
-            >
-              Déconnexion
-            </Button>
+              <Link href={userInformation && userInformation.email}>
+                <Text color={"primary.500"}>
+                  {userInformation && userInformation.email}
+                </Text>
+              </Link>
+            </VStack>
+            <Box mx={"auto"} my={10}>
+              <QRCode
+                size={150}
+                value={userInformation && userInformation.qrcode}
+              ></QRCode>
+            </Box>
+            <Box>
+              <Button
+                mx={"auto"}
+                bgColor={"danger.600"}
+                w={"80%"}
+                onPress={() => navigation.navigate("Login")}
+              >
+                Déconnexion
+              </Button>
+            </Box>
           </Box>
         </Box>
       </ScrollView>
