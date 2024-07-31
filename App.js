@@ -6,7 +6,6 @@ import * as SplashScreen from "expo-splash-screen";
 import useFonts from "./src/hooks/useFonts";
 import AppNavigator from "./src/navigation/AppNavigator";
 import customTheme from "./src/themes/customTheme";
-// import { SelectedChildProvider } from "./src/hooks/SelectedChildContext";
 
 SplashScreen.preventAutoHideAsync();
 

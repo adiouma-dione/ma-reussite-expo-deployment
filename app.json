@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "ma-reussite-mobile-app",
-    "slug": "ma-reussite-mobile-app",
+    "name": "Ma Réussite Mobile App",
+    "slug": "ma-reussite",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -31,8 +31,9 @@
     },
     "extra": {
       "eas": {
-        "projectId": "05cc3560-a72d-4980-b099-1fa1428ccee7"
+        "projectId": "c3839f5f-66c2-44fc-b0b6-f7f977ea623e"
       }
-    }
+    },
+    "owner": "adiouma"
   }
 }
