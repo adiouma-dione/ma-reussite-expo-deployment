@@ -12,9 +12,9 @@ import {
   Actionsheet,
 } from "native-base";
 import React, { useEffect, useState } from "react";
-import { BackgroundWrapper } from "../components";
-import config from "../api/config";
-import { jsonrpcRequest } from "../api/apiClient";
+import { BackgroundWrapper } from "../../components";
+import config from "../../api/config";
+import { jsonrpcRequest } from "../../api/apiClient";
 
 const ActivityScreen = () => {
   const route = useRoute();
@@ -27,7 +27,8 @@ const ActivityScreen = () => {
   const [selectedActivity, setSelectedActivity] = useState();
 
   useEffect(() => {
-    const { sessionId, email, password, partnerid } = route?.params;
+    const connectedUser = route?.params;
+    const { sessionId, email, password, partnerid } = connectedUser;
     setSessionId(sessionId);
     setPassword(password);
     setPartnerid(partnerid[1]);

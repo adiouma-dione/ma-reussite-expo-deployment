@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "ma-reussite",
-    "slug": "ma-reussite",
+    "name": "ma-reussite-mobile-app",
+    "slug": "ma-reussite-mobile-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -16,7 +16,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.adiouma.mareussite"
     },
     "android": {
       "adaptiveIcon": {
@@ -30,9 +31,8 @@
     },
     "extra": {
       "eas": {
-        "projectId": "c3839f5f-66c2-44fc-b0b6-f7f977ea623e"
+        "projectId": "05cc3560-a72d-4980-b099-1fa1428ccee7"
       }
-    },
-    "owner": "adiouma"
+    }
   }
 }

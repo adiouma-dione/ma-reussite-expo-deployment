@@ -16,9 +16,13 @@ import {
   VStack,
 } from "native-base";
 import React, { useEffect, useState } from "react";
-import { jsonrpcRequest } from "../api/apiClient";
-import config from "../api/config";
-import { BackgroundWrapper, PaymentCard, PaymentCardPlus } from "../components";
+import { jsonrpcRequest } from "../../api/apiClient";
+import config from "../../api/config";
+import {
+  BackgroundWrapper,
+  PaymentCard,
+  PaymentCardPlus,
+} from "../../components";
 
 const PaymentScreen = () => {
   const route = useRoute();
@@ -33,7 +37,8 @@ const PaymentScreen = () => {
   const [paymentDetails, setPaymentDetails] = useState({});
 
   useEffect(() => {
-    const { sessionId, email, password, partnerid } = route?.params;
+    const connectedUser = route?.params;
+    const { sessionId, email, password, partnerid } = connectedUser;
     setSessionId(sessionId);
     setPassword(password);
     setPartnerid(partnerid[0]);

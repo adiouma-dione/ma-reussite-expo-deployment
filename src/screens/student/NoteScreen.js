@@ -1,9 +1,9 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Box, Center, HStack, Spinner, Text } from "native-base";
 import React, { useEffect, useState } from "react";
-import { BackgroundWrapper, CircularProgress } from "../components";
-import config from "../api/config";
-import { jsonrpcRequest } from "../api/apiClient";
+import { BackgroundWrapper, CircularProgress } from "../../components";
+import config from "../../api/config";
+import { jsonrpcRequest } from "../../api/apiClient";
 
 const NoteScreen = () => {
   const route = useRoute();
@@ -17,7 +17,8 @@ const NoteScreen = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const { sessionId, email, password, partnerid } = route?.params;
+    const connectedUser = route?.params;
+    const { sessionId, email, password, partnerid } = connectedUser;
     setSessionId(sessionId);
     setPassword(password);
     setPartnerid(partnerid[0]);

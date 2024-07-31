@@ -6,6 +6,7 @@ import * as SplashScreen from "expo-splash-screen";
 import useFonts from "./src/hooks/useFonts";
 import AppNavigator from "./src/navigation/AppNavigator";
 import customTheme from "./src/themes/customTheme";
+// import { SelectedChildProvider } from "./src/hooks/SelectedChildContext";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -27,7 +28,7 @@ const App = () => {
           onMessage={handleWebViewMessage}
         />
         <Button w={"50%"} mx={"auto"} mb={"2%"} onPress={onAccept}>
-          Accept
+          J'accepte
         </Button>
       </NativeBaseProvider>
     );
@@ -68,7 +69,9 @@ const App = () => {
 
   return (
     <NativeBaseProvider isSSR theme={customTheme}>
+      {/* <SelectedChildProvider> */}
       <AppNavigator />
+      {/* </SelectedChildProvider> */}
     </NativeBaseProvider>
   );
 };

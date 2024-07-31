@@ -1,8 +1,9 @@
 const config = {
   baseUrl: "https://test.erp.craftschoolship.com/jsonrpc",
   database: "bitnami_odoo",
-  username: "test@example.com",
-  password: "Temp4Now#",
+  username: process.env.EXPO_PUBLIC_USERNAME,
+  password: process.env.EXPO_PUBLIC_PASSWORD,
+
   model: {
     accountMove: "account.move",
     accountMoveLine: "account.move.line",
@@ -13,9 +14,11 @@ const config = {
     craftInstallmentLines: "craft.installment.lines",
     craftSession: "craft.session",
     craftStudent: "craft.student",
+    craftParentChildLine: "craft.parent.child.line",
     groups: "op.batch",
     opActivity: "op.activity",
     opCourse: "op.course",
+    opParents: "op.parent",
     opSession: "op.session",
     opStudent: "op.student",
     parents: "craft.parent",
@@ -26,5 +29,4 @@ const config = {
     users: "res.users",
   },
 };
-
 export default config;

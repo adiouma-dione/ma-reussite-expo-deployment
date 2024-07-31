@@ -10,9 +10,9 @@ import {
   VStack,
 } from "native-base";
 import React, { useEffect, useState } from "react";
-import { jsonrpcRequest } from "../api/apiClient";
-import config from "../api/config";
-import { BackgroundWrapper, CircularProgress } from "../components";
+import { jsonrpcRequest } from "../../api/apiClient";
+import config from "../../api/config";
+import { BackgroundWrapper, CircularProgress } from "../../components";
 
 const GroupScreen = ({ navigation }) => {
   const route = useRoute();
@@ -23,7 +23,8 @@ const GroupScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const { sessionId, email, password, partnerid } = route?.params;
+    const connectedUser = route?.params;
+    const { sessionId, email, password, partnerid } = connectedUser;
     setSessionId(sessionId);
     setPartnerid(partnerid[0]);
     setPassword(password);

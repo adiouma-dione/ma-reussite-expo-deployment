@@ -1,22 +1,12 @@
 import React from "react";
 import { ImageBackground, StyleSheet } from "react-native";
-import HomeScreenBanner from "./HomeScreenBanner";
+import ParentHomeScreenBanner from "./ParentHomeScreenBanner";
 
-const BackgroundWrapper = ({
-  children,
-  selectedChild,
-  navigation,
-  listOfChildren,
-  // role,
-}) => {
+const ParentBackgroundWrapper = ({ children, navigation }) => {
   return (
     <>
-      <HomeScreenBanner
-        // role={role}
-        listOfChildren={listOfChildren}
-        selectedChild={selectedChild}
-        navigation={navigation}
-      />
+      <ParentHomeScreenBanner navigation={navigation} />
+
       <ImageBackground
         style={styles.background}
         source={require("../../assets/images/ma_reussite_background.png")}
@@ -34,4 +24,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BackgroundWrapper;
+export default ParentBackgroundWrapper;

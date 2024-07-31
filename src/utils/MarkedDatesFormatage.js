@@ -30,7 +30,7 @@ const generateRecurrenceDates = (event) => {
 const formatOdooEvents = (events) => {
   const markedDates = {};
 
-  events.forEach((event) => {
+  events?.forEach((event) => {
     let eventDates = [];
 
     if (event.recurrency) {
