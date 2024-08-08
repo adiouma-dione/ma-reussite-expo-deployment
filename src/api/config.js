@@ -3,10 +3,10 @@ const config = {
   database: "bitnami_odoo",
   username: process.env.EXPO_PUBLIC_USERNAME,
   password: process.env.EXPO_PUBLIC_PASSWORD,
-
   model: {
     accountMove: "account.move",
     accountMoveLine: "account.move.line",
+    accountTax: "account.tax",
     attendance: "op.attendance.line",
     calendar: "calendar.event",
     calendarAttendee: "calendar.attendee",
@@ -15,7 +15,8 @@ const config = {
     craftSession: "craft.session",
     craftStudent: "craft.student",
     craftParentChildLine: "craft.parent.child.line",
-    groups: "op.batch",
+    // groups: "op.batch",
+    groups: "craft.class",
     opActivity: "op.activity",
     opCourse: "op.course",
     opParents: "op.parent",
@@ -24,9 +25,13 @@ const config = {
     parents: "craft.parent",
     partner: "res.partner",
     productTemplate: "product.template",
+    resCurrency: "res.currency",
+    resGroups: "res.groups",
     saleOrder: "sale.order",
+    // parents: "craft.parent",
     teachers: "craft.teacher",
     users: "res.users",
   },
 };
+
 export default config;

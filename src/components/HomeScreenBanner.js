@@ -59,15 +59,51 @@ function HomeScreenBanner() {
 
   useEffect(() => {
     const fetchProfileImage = async () => {
-      const { sessionId, password, partnerid } = connectedUser;
+      const { sessionId, password, partnerid, role } = connectedUser;
       try {
-        const userData = await jsonrpcRequest(
-          sessionId,
-          password,
-          config.model.partner,
-          [[["id", "=", partnerid[0]]]],
-          ["image_1024"]
-        );
+        // const userData = await jsonrpcRequest(
+        //   sessionId,
+        //   password,
+        //   config.model.partner,
+        //   [[["id", "=", partnerid[0]]]],
+        //   ["image_1024"]
+        // );
+        // ! ================================================================
+
+        let userData = [];
+        switch (role) {
+          case "parent":
+            userData = await jsonrpcRequest(
+              sessionId,
+              password,
+              config.model.parents,
+              [[["contact_id", "=", partnerid[0]]]],
+              ["image_1024"]
+            );
+            break;
+
+          case "teacher":
+            userData = await jsonrpcRequest(
+              sessionId,
+              password,
+              config.model.teachers,
+              [[["work_contact_id", "=", partnerid[0]]]],
+              ["image_1024"]
+            );
+            break;
+
+          default:
+            userData = await jsonrpcRequest(
+              sessionId,
+              password,
+              config.model.opStudent,
+              [[["partner_id", "=", partnerid[0]]]],
+              ["image_1024"]
+            );
+            break;
+        }
+
+        // ! ================================================================
 
         if (userData?.length > 0 && userData[0]?.image_1024) {
           const { image_1024 } = userData[0];

@@ -1,14 +1,9 @@
-import { MaterialIcons } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import {
   Actionsheet,
   Box,
   Center,
   HStack,
-  Icon,
-  IconButton,
-  Menu,
-  Pressable,
   ScrollView,
   Spinner,
   Text,
@@ -16,7 +11,7 @@ import {
   VStack,
 } from "native-base";
 import React, { useEffect, useState } from "react";
-import { jsonrpcRequest } from "../../api/apiClient";
+import { getObject, jsonrpcRequest } from "../../api/apiClient";
 import config from "../../api/config";
 import {
   BackgroundWrapper,
@@ -35,6 +30,7 @@ const PaymentScreen = () => {
   const [payments, setPayments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [paymentDetails, setPaymentDetails] = useState({});
+  const [currencySybol, setCurrencySybol] = useState();
 
   useEffect(() => {
     const connectedUser = route?.params;
@@ -71,10 +67,24 @@ const PaymentScreen = () => {
             "move_name",
             "name",
             "partner_id",
+            "price_subtotal",
             "price_total",
             "product_id",
+            "tax_ids",
+            "currency_id",
           ]
         );
+
+        // console.log("paymentDetails...", paymentDetails[0]);
+
+        const currencies = await getObject("currencies");
+
+        currencies.forEach((currency) => {
+          if (currency.id === paymentDetails[0].currency_id[0]) {
+            console.log("currencies...", currency);
+            setCurrencySybol(currency.symbol);
+          }
+        });
 
         const paymentTab = [];
         paymentDetails.map((payment) => {
@@ -87,6 +97,8 @@ const PaymentScreen = () => {
             });
           }
         });
+        // console.log("paymentTab...", paymentTab);
+
         setPayments(paymentTab);
       } catch (error) {
         console.error("Error fetching payments:", error);
@@ -123,7 +135,7 @@ const PaymentScreen = () => {
           >
             Historique de paiements
           </Text>
-          <Menu
+          {/* <Menu
             trigger={(triggerProps) => {
               return (
                 <Pressable {...triggerProps}>
@@ -151,13 +163,13 @@ const PaymentScreen = () => {
               );
             }}
           >
-            {/* <Menu.Item color={"black"} onPress={() => setSortOrder("recent")}>
+            <Menu.Item color={"black"} onPress={() => setSortOrder("recent")}>
                 Plus récents
               </Menu.Item>
               <Menu.Item color={"black"} onPress={() => setSortOrder("oldest")}>
                 Plus anciens
-              </Menu.Item> */}
-          </Menu>
+              </Menu.Item>
+          </Menu> */}
         </HStack>
         {loading ? (
           <Center h={"70%"} w={"90%"} mx={"auto"}>
@@ -173,7 +185,6 @@ const PaymentScreen = () => {
             contentContainerStyle={{ paddingBottom: 80 }}
           >
             <VStack w={"full"} mb={"10%"} space={4} minH={"80%"}>
-              {console.log("payments.length...", payments.length)}
               {payments.length > 0 ? (
                 payments.map((payment, index) => (
                   <PaymentCard
@@ -181,11 +192,15 @@ const PaymentScreen = () => {
                     date={payment.date}
                     name={payment.name}
                     product_id={payment.product_id}
+                    price_subtotal={payment.price_subtotal}
                     display_name={payment.display_name}
                     amount={payment.price_total}
                     state={payment.payment_state}
                     partner_id={payment.partner_id}
+                    currency_sybol={currencySybol}
+                    tax_ids={payment.tax_ids}
                     handlePress={handlePress}
+                    occupation="teacher"
                     onOpen={onOpen}
                   />
                 ))
@@ -209,7 +224,6 @@ const PaymentScreen = () => {
         <Actionsheet
           isOpen={isOpen}
           onClose={() => {
-            // setSelectedDayEvents([]);
             onClose();
           }}
         >
@@ -221,11 +235,14 @@ const PaymentScreen = () => {
                 fontSize="lg"
                 fontWeight="bold"
               >
-                Facture
+                Détails du fiche de paie
               </Text>
             </Box>
             {paymentDetails.name !== undefined && (
-              <PaymentCardPlus paymentDetails={paymentDetails} />
+              <PaymentCardPlus
+                paymentDetails={paymentDetails}
+                occupation="teacher"
+              />
             )}
           </Actionsheet.Content>
         </Actionsheet>

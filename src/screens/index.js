@@ -12,5 +12,12 @@ export { default as ParentPaymentScreen } from "./parent/PaymentScreen";
 export { default as ParentGroupScreen } from "./parent/GroupScreen";
 export { default as ParentNoteScreen } from "./parent/NoteScreen";
 export { default as ParentActivityScreen } from "./parent/ActivityScreen";
-// export { default as ParentProfileScreen } from "./parent/ProfileScreen";
-// export { default as ParentLoginScreen } from "./parent/LoginScreen";
+
+export { default as TeacherHomeScreen } from "./teacher/HomeScreen";
+export { default as TeacherPaymentScreen } from "./teacher/PaymentScreen";
+export { default as TeacherGroupScreen } from "./teacher/GroupScreen";
+export { default as TeacherActivityScreen } from "./teacher/ActivityScreen";
+
+export { default as AdminHomeScreen } from "./admin/HomeScreen";
+export { default as AdminGroupScreen } from "./admin/GroupScreen";
+export { default as AdminActivityScreen } from "./admin/ActivityScreen";

@@ -1,7 +1,6 @@
 import React from "react";
 import { ImageBackground, StyleSheet } from "react-native";
 import HomeScreenBanner from "./HomeScreenBanner";
-import { StatusBar } from "native-base";
 
 const BackgroundWrapper = ({
   children,
@@ -12,7 +11,6 @@ const BackgroundWrapper = ({
 }) => {
   return (
     <>
-      <StatusBar backgroundColor={"white"} barStyle={"dark-content"} />
       <HomeScreenBanner
         // role={role}
         listOfChildren={listOfChildren}

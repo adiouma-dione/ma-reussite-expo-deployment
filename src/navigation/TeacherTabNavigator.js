@@ -3,18 +3,17 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useRoute } from "@react-navigation/native";
 import React from "react";
 import {
-  ParentActivityScreen,
-  ParentGroupScreen,
-  ParentHomeScreen,
-  ParentNoteScreen,
-  ParentPaymentScreen,
+  TeacherActivityScreen,
+  TeacherGroupScreen,
+  TeacherHomeScreen,
+  TeacherPaymentScreen,
 } from "../screens";
 import MA_REUSSITE_CUSTOM_COLORS from "../themes/variables";
 import { AppProvider } from "../hooks/AppProvider";
 
 const Tab = createBottomTabNavigator();
 
-export const ParentTabNavigator = () => {
+export const TeacherTabNavigator = () => {
   const propagedRoute = useRoute();
   return (
     <AppProvider>
@@ -26,12 +25,11 @@ export const ParentTabNavigator = () => {
 
             if (route.name === "Home") {
               iconName = "home";
-            } else if (route.name === "Payment") {
-              iconName = "payment";
+            } else if (route.name === "Fiches de paie") {
+              // receipt-long
+              iconName = "receipt";
             } else if (route.name === "Groups") {
               iconName = "group";
-            } else if (route.name === "Notes") {
-              iconName = "timeline";
             } else if (route.name === "Activities") {
               iconName = "notifications";
             }
@@ -56,32 +54,25 @@ export const ParentTabNavigator = () => {
       >
         <Tab.Screen
           name="Home"
-          component={ParentHomeScreen}
+          component={TeacherHomeScreen}
           options={{ tabBarLabel: "Home" }}
         />
         <Tab.Screen
-          name="Payment"
-          component={ParentPaymentScreen}
-          options={{ tabBarLabel: "Payement" }}
+          name="Fiches de paie"
+          component={TeacherPaymentScreen}
+          options={{ tabBarLabel: "Fiches de paie" }}
         />
         <Tab.Screen
           name="Groups"
-          component={ParentGroupScreen}
+          component={TeacherGroupScreen}
           options={{ tabBarLabel: "Groupes" }}
         />
         <Tab.Screen
-          name="Notes"
-          component={ParentNoteScreen}
-          options={{ tabBarLabel: "Notes" }}
-        />
-        <Tab.Screen
           name="Activities"
-          component={ParentActivityScreen}
+          component={TeacherActivityScreen}
           options={{ tabBarLabel: "Activités" }}
         />
       </Tab.Navigator>
     </AppProvider>
   );
 };
-
-// export default ParentTabNavigator;

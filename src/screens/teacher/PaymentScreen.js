@@ -1,19 +1,14 @@
-import { MaterialIcons } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import {
   Actionsheet,
   Box,
   Center,
   HStack,
-  Icon,
-  IconButton,
-  Menu,
-  Pressable,
   ScrollView,
   Spinner,
   Text,
   useDisclose,
-  VStack,
+  VStack
 } from "native-base";
 import React, { useEffect, useState } from "react";
 import { getObject, jsonrpcRequest } from "../../api/apiClient";
@@ -23,45 +18,27 @@ import {
   PaymentCard,
   PaymentCardPlus,
 } from "../../components";
-import { useAppContext } from "../../hooks/AppProvider";
 
 const PaymentScreen = () => {
   const route = useRoute();
   const navigation = useNavigation();
   const { isOpen, onOpen, onClose } = useDisclose();
   const [sortOrder, setSortOrder] = useState("recent");
+  const [sessionId, setSessionId] = useState(null);
+  const [password, setPassword] = useState(null);
+  const [partnerid, setPartnerid] = useState(null);
   const [payments, setPayments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [paymentDetails, setPaymentDetails] = useState({});
-  const [connectedUser, setConnectedUser] = useState({
-    sessionId: "",
-    email: "",
-    password: "",
-    partnerid: "",
-    role: "",
-  });
-  const [childrenList, setChildrenList] = useState([]);
-  const { selectedChild, setSelectedChild } = useAppContext();
   const [currencySybol, setCurrencySybol] = useState();
 
   useEffect(() => {
-    const getConnectedUser = async () => {
-      if (!connectedUser) return;
-      try {
-        const connectedUser = await getObject("connectedUser");
-        setConnectedUser(connectedUser);
-        if (connectedUser) {
-          if (!selectedChild) return;
-
-          const selectedChild = await getObject("selectedChild");
-          setSelectedChild(selectedChild);
-        }
-      } catch (error) {
-        console.error("Error while getting connectedUser:", error);
-      }
-    };
-    getConnectedUser();
-  }, [route, setSelectedChild]);
+    const connectedUser = route?.params;
+    const { sessionId, email, password, partnerid } = connectedUser;
+    setSessionId(sessionId);
+    setPassword(password);
+    setPartnerid(partnerid[0]);
+  }, [route]);
 
   const handlePress = (paymentDetails) => {
     setPaymentDetails(paymentDetails);
@@ -71,40 +48,19 @@ const PaymentScreen = () => {
   useEffect(() => {
     const fetchPayment = async () => {
       try {
-        if (
-          !connectedUser ||
-          !connectedUser.sessionId ||
-          !connectedUser.password ||
-          !connectedUser.partnerid
-        ) {
-          return;
-        }
-        let domain = [];
-        switch (connectedUser?.role) {
-          case "parent":
-            if (!selectedChild?.partner_id) return;
-            domain = [["partner_id", "=", selectedChild?.partner_id[0]]];
-            break;
-          case "student":
-            domain = [["partner_id", "=", connectedUser?.partnerid[0]]];
-            break;
-          default:
-            console.error("Unsupported role:", connectedUser?.role);
-            return;
-        }
         const paymentState = await jsonrpcRequest(
-          connectedUser?.sessionId,
-          connectedUser?.password,
+          sessionId,
+          password,
           config.model.accountMove,
-          [domain],
+          [[["partner_id", "=", partnerid]]],
           ["name", "payment_state"]
         );
 
         const paymentDetails = await jsonrpcRequest(
-          connectedUser?.sessionId,
-          connectedUser?.password,
+          sessionId,
+          password,
           config.model.accountMoveLine,
-          [domain],
+          [[["partner_id", "=", partnerid]]],
           [
             "date",
             "display_name",
@@ -117,7 +73,19 @@ const PaymentScreen = () => {
             "tax_ids",
             "currency_id",
           ]
+          // []
         );
+
+        console.log("paymentDetails...", paymentDetails[0]);
+
+        const currencies = await getObject("currencies");
+
+        currencies.forEach((currency) => {
+          if (currency.id === paymentDetails[0].currency_id[0]) {
+            console.log("currencies...", currency);
+            setCurrencySybol(currency.symbol);
+          }
+        });
 
         const paymentTab = [];
         paymentDetails.map((payment) => {
@@ -130,6 +98,8 @@ const PaymentScreen = () => {
             });
           }
         });
+        // console.log("paymentTab...", paymentTab);
+
         setPayments(paymentTab);
       } catch (error) {
         console.error("Error fetching payments:", error);
@@ -138,8 +108,10 @@ const PaymentScreen = () => {
       }
     };
 
-    if (connectedUser && selectedChild) fetchPayment();
-  }, [connectedUser, selectedChild]);
+    if (sessionId && password && partnerid) {
+      fetchPayment();
+    }
+  }, [sessionId, password, partnerid]);
 
   useEffect(() => {
     // payments && console.log("Partner...", new Date().getMinutes(), payments);

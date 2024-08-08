@@ -9,7 +9,11 @@ const PaymentCard = ({
   product_id,
   display_name,
   partner_id,
+  currency_sybol,
   handlePress,
+  tax_ids,
+  price_subtotal,
+  occupation = "student",
 }) => {
   const statusPayment =
     state !== "not_paid"
@@ -24,6 +28,9 @@ const PaymentCard = ({
     product_id: product_id,
     display_name: display_name,
     partner_id: partner_id,
+    currency_sybol: currency_sybol,
+    tax_ids: tax_ids,
+    price_subtotal: price_subtotal,
   };
 
   return (
@@ -41,7 +48,8 @@ const PaymentCard = ({
                 {product_id[1]} {date.split("-")[0]}
               </Text>
               <Text fontSize={"md"} color="black">
-                Somme : {amount} €
+                {occupation === "student" ? "Somme : " : "Salaire : "}
+                {`${amount} ${currency_sybol}`}
               </Text>
             </Box>
             <Box

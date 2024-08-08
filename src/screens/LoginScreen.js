@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import { Formik } from "formik";
-import { Box, StatusBar, Text, VStack } from "native-base";
+import { Box, StatusBar, Text, useToast, VStack } from "native-base";
 import React, { useEffect, useRef, useState } from "react";
 import {
   authenticate,
@@ -18,12 +18,13 @@ const LoginScreen = () => {
   const navigation = useNavigation();
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(true); // initial state should be false
+  const [loading, setLoading] = useState(true);
   const [connectedUser, setConnectedUser] = useState({
     sessionId: "",
     email: "",
     password: "",
     partnerid: "",
+    groups_id: [],
     role: "",
   });
   const [selectedChild, setSelectedChild] = useState({});
@@ -36,23 +37,38 @@ const LoginScreen = () => {
       const partner = await jsonrpcRequest(
         sidAdmin,
         config.password,
-        config.model.partner,
+        config.model.users,
         [[["email", "=", values.email]]],
-        ["self", "is_student", "is_parent"]
+        ["self", "is_student", "is_parent", "groups_id"]
       );
+
+      // console.log("partner...", partner);
 
       if (partner.length > 0) {
         const partnerid = partner[0].self;
         setError("");
-        const role =
-          (partner[0].is_student && "student") ||
-          (partner[0].is_parent && "parent");
+        const role = partner[0].groups_id.includes(
+          Number(process.env.EXPO_PUBLIC_ADMIN_ID)
+        )
+          ? "admin"
+          : partner[0].groups_id.includes(
+              Number(process.env.EXPO_PUBLIC_TEACHER_ID)
+            )
+          ? "teacher"
+          : partner[0].is_parent
+          ? "parent"
+          : partner[0].is_student
+          ? "student"
+          : "other";
+
+        // console.log("role...", role);
 
         await storeObject("connectedUser", {
           sessionId: sidAdmin,
           email: config.username,
           password: config.password,
           partnerid: partnerid,
+          groups_id: partner[0].groups_id,
           role: role,
         });
 
@@ -61,6 +77,7 @@ const LoginScreen = () => {
           email: config.username,
           password: config.password,
           partnerid: partnerid,
+          groups_id: partner[0].groups_id,
           role: role,
         });
       } else {
@@ -70,7 +87,7 @@ const LoginScreen = () => {
       console.error("Odoo JSON-RPC Error:", error);
       setError("Nom d'utilisateur ou mot de passe incorrect !");
     } finally {
-      setLoading(true); // reset loading state
+      setLoading(true);
     }
   };
 
@@ -118,9 +135,38 @@ const LoginScreen = () => {
       }
     };
 
-    if (connectedUser?.role) {
-      loadParentData();
-    }
+    if (connectedUser?.role) loadParentData();
+  }, [connectedUser]);
+
+  useEffect(() => {
+    const getCurrencies = async () => {
+      try {
+        const currencies = await jsonrpcRequest(
+          connectedUser.sessionId,
+          connectedUser.password,
+          config.model.resCurrency,
+          [],
+          ["id", "symbol"]
+        );
+
+        storeObject("currencies", currencies);
+
+        const taxes = await jsonrpcRequest(
+          connectedUser.sessionId,
+          connectedUser.password,
+          config.model.accountTax,
+          [],
+          ["id", "name"]
+        );
+
+        storeObject("taxes", taxes);
+        // console.log("TAX...", taxes);
+      } catch (error) {
+        console.error("Error fetching role:", error);
+      }
+    };
+
+    if (connectedUser?.role) getCurrencies();
   }, [connectedUser]);
 
   useEffect(() => {
@@ -130,8 +176,14 @@ const LoginScreen = () => {
         break;
       case "parent":
         if (children.length > 0 && Object.keys(selectedChild).length > 0) {
-          navigation.navigate("ParentTabNavigator");
+          navigation.navigate("ParentTabNavigator", connectedUser);
         }
+        break;
+      case "teacher":
+        navigation.navigate("TeacherTabNavigator", connectedUser);
+        break;
+      case "admin":
+        navigation.navigate("AdminTabNavigator", connectedUser);
         break;
       default:
         break;
